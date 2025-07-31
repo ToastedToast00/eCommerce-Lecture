@@ -11,3 +11,10 @@ I'm very new to Markdown and coding in general
 ## Another Fun Fact
 you can highlight with a double * to make **very important words** stand out
 [^1]: Footnote! :joy:
+
+# ABOUT ME
+I do not really know how to use markdown and don't really feel to <br>
+keen on finding a creative way to convey information to the user
+
+What I can say is that I like wikipedia's format for information <br>
+where everything is straightforward

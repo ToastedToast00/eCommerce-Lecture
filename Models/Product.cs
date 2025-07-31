@@ -17,6 +17,6 @@ namespace eCommerce.Models
 
         [Range (0, 10_000)]
         //the price of the product with an upper limit of 10,000 $
-        public double Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

@@ -12,5 +12,3 @@ public class ProductDbContext : DbContext
     //Entities to be tracked by DbContext
     public DbSet<Product> Products { get; set; }
 }
-
-

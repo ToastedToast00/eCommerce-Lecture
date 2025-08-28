@@ -11,8 +11,8 @@ using eCommerce.Data;
 namespace eCommerce.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20250731061432_DecimalPrice")]
-    partial class DecimalPrice
+    [Migration("20250828081615_ChangePriceToDecimal")]
+    partial class ChangePriceToDecimal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,8 +32,8 @@ namespace eCommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Title")
                         .IsRequired()

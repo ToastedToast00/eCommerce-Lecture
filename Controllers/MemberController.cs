@@ -15,6 +15,7 @@ public class MemberController : Controller
     {
         return View();
     }
+    [HttpPost]
     public async Task<IActionResult> Register(RegistrationViewModel reg)
     {
         //map view model to member model tracked by database
@@ -33,5 +34,11 @@ public class MemberController : Controller
             return RedirectToAction("Index", "Home");
         }
         return View(reg);
+    }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace eCommerce.Models;
 
@@ -76,4 +77,11 @@ public class RegistrationViewModel
     /// </summary>
     [DataType(DataType.Date)]
     public DateOnly DateOfBirth { get; set; }
+}
+
+public class LoginViewModel
+{ 
+    public required string UsernameOrEmail { get; set; }
+    public required string Password { get; set; }
+
 }

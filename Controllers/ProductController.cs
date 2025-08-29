@@ -15,7 +15,7 @@ public class ProductController : Controller
     public async Task<IActionResult> Index()
     {
         List<Product> allProducts = await _context.Products.ToListAsync();
-        return View();
+        return View(allProducts); //code not working, found issue: this bit was missing
     }
 
     [HttpGet]

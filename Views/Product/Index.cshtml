@@ -18,7 +18,7 @@
 	</div>
 }
 
-@if (Model == null || Model.Count() == 0) //This works, the lecture doesn't contain this, idk why it works and not having the null statement breaks it but whatever.
+@if (Model == null || !Model.Any())
 {
 	<p>No products are currently found</p>
 }

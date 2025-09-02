@@ -12,10 +12,35 @@ public class ProductController : Controller
     {
         _context = context;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1)
     {
-        List<Product> allProducts = await _context.Products.ToListAsync();
-        return View(allProducts); //code not working, found issue: this bit was missing
+        const int productsPerPage = 3;
+
+        int totalItems = await _context.Products.CountAsync();
+        int totalPagesNeeded = (int)Math.Ceiling((double)totalItems / productsPerPage);
+
+        if (page < 1) 
+            page = 1;
+
+        //if user tries to navigate to a page greater than total pages, set to last page
+        if (totalPagesNeeded > 0 && page > totalPagesNeeded) page = totalPagesNeeded;
+
+        List<Product> products = await _context.Products
+            .OrderBy(p => p.Title)
+            .Skip((page - 1) * productsPerPage)
+            .Take(productsPerPage)
+            .ToListAsync();
+
+        ProductListViewModel productListViewModel = new ProductListViewModel
+        {
+            Products = products,
+            CurrentPage = page,
+            TotalPages = totalPagesNeeded,
+            PageSize = productsPerPage,
+            TotalItems = totalItems
+        };
+
+        return View(productListViewModel);
     }
 
     [HttpGet]

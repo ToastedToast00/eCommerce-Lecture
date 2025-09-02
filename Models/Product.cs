@@ -20,4 +20,17 @@ namespace eCommerce.Models
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
     }
+    public class ProductListViewModel
+    {
+        public required IEnumerable<Product> Products { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+
+        //Search and filter criteria
+        public string? SearchTerm { get; set; }
+        public string? MinPrice { get; set; }
+        public string? MaxPrice { get; set; }
+    }
 }

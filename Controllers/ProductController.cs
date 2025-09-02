@@ -12,9 +12,25 @@ public class ProductController : Controller
     {
         _context = context;
     }
-    public async Task<IActionResult> Index(int page = 1)
+    public async Task<IActionResult> Index(string? searchTerm, decimal? minPrice, decimal? maxPrice, int page = 1)
     {
         const int productsPerPage = 3;
+
+        IQueryable<Product> query = _context.Products;
+
+        //apply filters
+        if (!string.IsNullOrWhiteSpace(searchTerm)) 
+        { 
+            query = query.Where(p => p.Title.ToLower().Contains(searchTerm));
+        }
+        if (minPrice.HasValue) 
+        { 
+            query = query.Where(p => p.Price >= minPrice.Value);
+        }
+        if (maxPrice.HasValue) 
+        { 
+            query = query.Where(p => p.Price <= maxPrice.Value);
+        }
 
         int totalItems = await _context.Products.CountAsync();
         int totalPagesNeeded = (int)Math.Ceiling((double)totalItems / productsPerPage);
@@ -37,7 +53,10 @@ public class ProductController : Controller
             CurrentPage = page,
             TotalPages = totalPagesNeeded,
             PageSize = productsPerPage,
-            TotalItems = totalItems
+            TotalItems = totalItems,
+            SearchTerm = searchTerm,
+            MinPrice = minPrice.ToString(),
+            MaxPrice = maxPrice.ToString()
         };
 
         return View(productListViewModel);

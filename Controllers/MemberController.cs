@@ -22,7 +22,29 @@ public class MemberController : Controller
         //map view model to member model tracked by database
         if (ModelState.IsValid) 
         {
-            Member newMember = new()
+            //Check if username or email already exists in database
+            bool usernameTaken = await _context.Members.
+                                            AnyAsync(m => m.Username == reg.Username);
+
+            if (usernameTaken) 
+            {
+                ModelState.AddModelError(nameof(Member.Username), "Username already taken");
+            }
+
+            bool emailTaken = await _context.Members.
+                                        AnyAsync(m => m.Email == reg.Email);
+
+            if (emailTaken)
+            {
+                ModelState.AddModelError(nameof(Member.Email), "Email already taken");
+            }
+
+            if (usernameTaken || emailTaken) 
+            { 
+                return View(reg);
+            }
+
+                Member newMember = new()
             {
                 Username = reg.Username,
                 Email = reg.Email,
@@ -48,10 +70,11 @@ public class MemberController : Controller
         if (ModelState.IsValid) 
         {
             //Check if username or email has match in database
-            Member? loggedInMember = await _context.Members
-                .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
-                    && m.Password == login.Password)
-                .SingleOrDefaultAsync();
+            var loggedInMember = await _context.Members
+                                    .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
+                                                    && m.Password == login.Password)
+                                    .Select(m => new { m.Username, m.MemberId})
+                                    .SingleOrDefaultAsync();
 
             if (loggedInMember == null)
             {

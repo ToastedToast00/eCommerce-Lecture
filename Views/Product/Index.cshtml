@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model ProductListViewModel
 @{
 	ViewData["Title"] = "Product Listings";
 }
@@ -18,7 +18,7 @@
 	</div>
 }
 
-@if (Model == null || !Model.Any())
+@if (!Model.Products.Any())
 {
 	<p>No products are currently found</p>
 }
@@ -27,13 +27,13 @@ else
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>@Html.DisplayNameFor(m => m.Title)</th>
-			<th>@Html.DisplayNameFor(m => m.Price)</th>
+			<th>Title)</th>
+			<th>Price)</th>
 			<th>Links</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (Product product in Model)
+		@foreach (Product product in Model.Products)
 		{
 			<tr>
 				<td>@Html.DisplayFor(p => product.Title)</td>
@@ -46,4 +46,27 @@ else
 		}
 	</tbody>
 </table>
+<nav aria-label="Product pages">
+	<ul class="pagination">
+		<li class="page-item" @(Model.CurrentPage == 1 ? "disabled" : "")>
+				<a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+		</li>
+		<li class="page-item" @(Model.CurrentPage == 1 ? "disabled" : "")>
+				<a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)">Previous</a>
+		</li>
+		@for (int i = 1; i <= Model.TotalPages; i++)
+		{
+			<li class="page-item" @(i == Model.CurrentPage ? "active" : "")>
+				<a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+			</li>
+	    }
+		<li class="page-item" @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")>
+			<a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)">Next</a>
+		</li>
+		<li class="page-item" @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")>
+			<a class="page-link" asp-action="Index" asp-route-page="@(Model.TotalPages)">Last</a>
+		</li>
+	</ul>
+	<p>Page @Model.CurrentPage of @Model.TotalPages (Total Items: @Model.TotalItems)</p>
+</nav>
 }

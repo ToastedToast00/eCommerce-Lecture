@@ -70,10 +70,11 @@ public class MemberController : Controller
         if (ModelState.IsValid) 
         {
             //Check if username or email has match in database
-            Member? loggedInMember = await _context.Members
-                .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
-                    && m.Password == login.Password)
-                .SingleOrDefaultAsync();
+            var loggedInMember = await _context.Members
+                                    .Where(m => (m.Username == login.UsernameOrEmail || m.Email == login.UsernameOrEmail)
+                                                    && m.Password == login.Password)
+                                    .Select(m => new { m.Username, m.MemberId})
+                                    .SingleOrDefaultAsync();
 
             if (loggedInMember == null)
             {
